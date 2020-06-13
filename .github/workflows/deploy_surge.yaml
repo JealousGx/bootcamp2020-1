@@ -4,10 +4,7 @@ name: Deploy Website
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
-on:
-  push:
-    branches: [ master ]
-
+on: [push]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -21,10 +18,16 @@ jobs:
     - uses: actions/checkout@v2
 
     # Runs a single command using the runners shell
-    - name: Install NodeJS
+    - name: Install node.js
       uses: actions/setup-node@v2-beta
       with: 
         node-version: 12
+    - name: Yarn Installation
+      run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sude apt-key add - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    - name: Install yarn
+      run: sudo apt update && sudo apt install yarn
+    - name: Build react app
+      run: yarn build
     - name: Install Surge
       run: npm install -g surge
     - name: Run Surge
